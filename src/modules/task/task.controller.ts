@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -16,6 +17,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth';
 import { Response } from 'express';
+import { TaskGuard } from 'src/guards/task';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -53,9 +55,10 @@ export class TaskController {
     });
   }
 
+  @UseGuards(TaskGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(+id);
+  findOne(@Request() req, @Param('id') _id: string) {
+    return req.task;
   }
 
   @Patch(':id')
