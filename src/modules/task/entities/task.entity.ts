@@ -21,4 +21,7 @@ export class Task extends Model {
 
   @Column
   userAssigneeId: number;
+
+  @Column
+  deletedAt: Date;
 }

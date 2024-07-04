@@ -24,7 +24,9 @@ export class TaskService {
   }
 
   async findOne(id: number): Promise<Task> {
-    const task = await this.tasksRepository.findByPk(id);
+    const task = await this.tasksRepository.findOne({
+      where: { id, deletedAt: null },
+    });
     if (!task) {
       throw new NotFoundException('Task not found');
     }
@@ -38,7 +40,16 @@ export class TaskService {
     return task;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: number) {
+    return await this.tasksRepository.update(
+      {
+        deletedAt: new Date(),
+      },
+      {
+        where: {
+          id,
+        },
+      },
+    );
   }
 }

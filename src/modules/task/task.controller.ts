@@ -73,7 +73,7 @@ export class TaskController {
       const updateTask = await this.taskService.update(task, updateTaskDto);
 
       return res.json({
-        message: 'Task created',
+        message: 'Task updated',
         data: updateTask,
       });
     } catch (error) {
@@ -83,8 +83,19 @@ export class TaskController {
     }
   }
 
+  @UseGuards(TaskGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taskService.remove(+id);
+  async remove(@Param('id') id: number, @Res() res: Response) {
+    try {
+      await this.taskService.remove(id);
+
+      return res.json({
+        message: 'Task deleted',
+      });
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: error.message,
+      });
+    }
   }
 }
