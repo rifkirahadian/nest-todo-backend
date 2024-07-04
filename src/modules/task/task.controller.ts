@@ -61,9 +61,26 @@ export class TaskController {
     return req.task;
   }
 
+  @UseGuards(TaskGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: CreateTaskDto) {
-    return this.taskService.update(+id, updateTaskDto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateTaskDto: CreateTaskDto,
+    @Res() res: Response,
+  ) {
+    try {
+      const task = await this.taskService.findOne(id);
+      const updateTask = await this.taskService.update(task, updateTaskDto);
+
+      return res.json({
+        message: 'Task created',
+        data: updateTask,
+      });
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: error.message,
+      });
+    }
   }
 
   @Delete(':id')

@@ -31,8 +31,11 @@ export class TaskService {
     return task;
   }
 
-  update(id: number, updateTaskDto: CreateTaskDto) {
-    return updateTaskDto;
+  async update(task: Task, updateTaskDto: CreateTaskDto): Promise<Task> {
+    task.set({ ...updateTaskDto });
+    await task.save();
+
+    return task;
   }
 
   remove(id: number) {
