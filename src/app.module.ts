@@ -4,6 +4,7 @@ import { UserModule } from './modules/user/user.module';
 import { TaskModule } from './modules/task/task.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationModule } from './modules/notification/notification.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { NotificationModule } from './modules/notification/notification.module';
     TaskModule,
     EventEmitterModule.forRoot(),
     NotificationModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
