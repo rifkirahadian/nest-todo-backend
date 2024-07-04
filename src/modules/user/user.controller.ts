@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  HttpStatus,
+  Get,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterDto } from './dto/register.dto';
 import { hashPassword, isMatchPassword } from 'src/utils/password';
@@ -6,6 +15,8 @@ import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { jwtConstants } from 'src/constants/jwt';
+import { AuthGuard } from 'src/guards/auth';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -66,5 +77,14 @@ export class UserController {
     return res.json({
       access_token: token,
     });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('auth')
+  async authUser(@Res() res: Response, @Request() req) {
+    const user = req.user;
+
+    return res.json({ user });
   }
 }
