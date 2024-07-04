@@ -40,6 +40,13 @@ export class TaskService {
     return task;
   }
 
+  async assignTask(task: Task, userAssigneeId: number): Promise<Task> {
+    task.set({ userAssigneeId });
+    await task.save();
+
+    return task;
+  }
+
   async remove(id: number) {
     return await this.tasksRepository.update(
       {

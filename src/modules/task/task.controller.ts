@@ -18,12 +18,17 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth';
 import { Response } from 'express';
 import { TaskGuard } from 'src/guards/task';
+import { UserService } from '../user/user.service';
+import { AssignTaskDto } from './dto/assign-task.dto';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   async create(
@@ -59,6 +64,19 @@ export class TaskController {
   @Get(':id')
   findOne(@Request() req, @Param('id') _id: string) {
     return req.task;
+  }
+
+  @Patch('assign')
+  async assign(@Body() assignTaskDto: AssignTaskDto, @Res() res: Response) {
+    const user = await this.userService.findOneByEmail(assignTaskDto.email);
+    const task = await this.taskService.findOne(assignTaskDto.taskId);
+
+    const assignTask = await this.taskService.assignTask(task, user.id);
+
+    return res.json({
+      message: 'Task assigned',
+      data: assignTask,
+    });
   }
 
   @UseGuards(TaskGuard)
