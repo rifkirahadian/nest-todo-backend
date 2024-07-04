@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Body,
   UseGuards,
@@ -38,5 +39,14 @@ export class TaskController {
         message: error.message,
       });
     }
+  }
+
+  @Get()
+  async findAll(@Res() res: Response, @Request() req) {
+    const user = req.user;
+    const data = await this.taskService.findAll(user.id);
+    return res.json({
+      data,
+    });
   }
 }
