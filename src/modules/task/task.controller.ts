@@ -3,6 +3,9 @@ import {
   Get,
   Post,
   Body,
+  Patch,
+  Param,
+  Delete,
   UseGuards,
   Res,
   HttpStatus,
@@ -48,5 +51,20 @@ export class TaskController {
     return res.json({
       data,
     });
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.taskService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateTaskDto: CreateTaskDto) {
+    return this.taskService.update(+id, updateTaskDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.taskService.remove(+id);
   }
 }
