@@ -20,6 +20,8 @@ import { Response } from 'express';
 import { TaskGuard } from 'src/guards/task';
 import { UserService } from '../user/user.service';
 import { AssignTaskDto } from './dto/assign-task.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CreateNotificationEvent } from '../notification/events/create-notification.event';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -28,6 +30,7 @@ export class TaskController {
   constructor(
     private readonly taskService: TaskService,
     private readonly userService: UserService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   @Post()
@@ -72,6 +75,17 @@ export class TaskController {
     const task = await this.taskService.findOne(assignTaskDto.taskId);
 
     const assignTask = await this.taskService.assignTask(task, user.id);
+
+    this.eventEmitter.emit(
+      'notification.create',
+      new CreateNotificationEvent({
+        content: `Task ${task.title} has been assigned to you`,
+        userId: user.id,
+        taskId: task.id,
+        commentId: null,
+        type: 'task-assign',
+      }),
+    );
 
     return res.json({
       message: 'Task assigned',

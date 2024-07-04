@@ -31,6 +31,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      isRead: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       updatedAt: Sequelize.DATE,
       createdAt: Sequelize.DATE,
     });
