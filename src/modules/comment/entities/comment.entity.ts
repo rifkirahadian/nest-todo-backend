@@ -1,9 +1,17 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { User } from 'src/modules/user/entities/user.entity';
 
 @Table({
   tableName: 'comments',
 })
 export class Comment extends Model {
+  @ForeignKey(() => User)
   @Column
   userId: number;
 
@@ -12,4 +20,7 @@ export class Comment extends Model {
 
   @Column
   comment: string;
+
+  @BelongsTo(() => User)
+  user: User;
 }

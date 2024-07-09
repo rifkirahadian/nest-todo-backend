@@ -5,6 +5,8 @@ import {
   Res,
   UseGuards,
   Request,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -60,6 +62,14 @@ export class CommentController {
     return res.json({
       message: 'Comment created',
       data: comment,
+    });
+  }
+
+  @Get()
+  async findAll(@Res() res: Response, @Query('taskId') taskId: number) {
+    const data = await this.commentService.findAll(taskId);
+    return res.json({
+      data,
     });
   }
 }

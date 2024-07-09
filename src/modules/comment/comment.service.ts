@@ -12,4 +12,18 @@ export class CommentService {
   create(payload: CreateCommentDto, userId: number) {
     return this.commentsRepository.create({ ...payload, userId });
   }
+
+  findAll(taskId: number): Promise<Comment[]> {
+    return this.commentsRepository.findAll({
+      where: {
+        taskId,
+      },
+      include: [
+        {
+          association: 'user',
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+  }
 }
