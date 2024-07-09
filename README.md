@@ -32,6 +32,12 @@
 $ npm install
 ```
 
+## Execute Database Migration
+
+```bash
+$ npx sequelize db:migrate
+```
+
 ## Running the app
 
 ```bash
@@ -56,6 +62,15 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Docker running
+
+Or you can just execute docker command to run the project
+
+```bash
+$ docker compose build
+$ docker compose up -d
 ```
 
 ## Support
