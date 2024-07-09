@@ -20,6 +20,20 @@ export class TaskService {
         [Op.or]: [{ userCreatedId: userId }, { userAssigneeId: userId }],
         deletedAt: null,
       },
+      attributes: [
+        'id',
+        'title',
+        'status',
+        'dueDate',
+        'userAssigneeId',
+        'userCreatedId',
+      ],
+      include: [
+        {
+          association: 'userAssignee',
+          attributes: ['id', 'name'],
+        },
+      ],
     });
   }
 
