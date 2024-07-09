@@ -74,6 +74,18 @@ export class TaskController {
     const user = await this.userService.findOneByEmail(assignTaskDto.email);
     const task = await this.taskService.findOne(assignTaskDto.taskId);
 
+    if (!user) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        message: 'Email not found',
+      });
+    }
+
+    if (!task) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        message: 'Task not found',
+      });
+    }
+
     const assignTask = await this.taskService.assignTask(task, user.id);
 
     this.eventEmitter.emit(
